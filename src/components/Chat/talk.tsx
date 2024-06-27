@@ -7,10 +7,11 @@ export type TalkItem = {
 
 type Props = {
     talk: Array<TalkItem>
+    lastMessage?: TalkItem
 }
 
 export const Talk = ({
-    talk
+    talk, lastMessage
 }: Props) => {
 
     return <TalkContainer>
@@ -22,12 +23,10 @@ export const Talk = ({
             </TalkItemContainer>)
         }
         {
-            talk.length === 0 && <TalkItemContainer>
-                <SpeakerName>
-                    AI
-                </SpeakerName>
+            lastMessage && <TalkItemContainer>
+                <SpeakerName>{lastMessage.speaker}</SpeakerName>
                 <Separator>:</Separator>
-                <Text>Hi! How can I help you?</Text>
+                <Text>{lastMessage.text}</Text>
             </TalkItemContainer>
         }
     </TalkContainer>

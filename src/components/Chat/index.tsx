@@ -57,9 +57,21 @@ export const Chat = () => {
         setTalk(prev => [...prev, { speaker: 'AI', text: response }])
     }
 
+    const lastMessage = React.useMemo(() => {
+        if (talk.length) {
+            return undefined;
+        }
+        if (aiSession) {
+            return { speaker: "AI", text: "Hi! How can I help you?" }
+        }
+        return { speaker: "AI", text: "Sorry, I cannot start a conversation right now" }
+    }, [aiSession, !!talk.length])
+
     return <Container>
-        <Talk talk={talk}></Talk>
-        <ChatInput value={prompt} onChange={(e) => setPrompt(e.currentTarget.value)} onSubmit={handleSubmit}></ChatInput>
+        <Talk talk={talk} lastMessage={lastMessage}></Talk>
+        {aiSession &&
+            <ChatInput value={prompt} onChange={(e) => setPrompt(e.currentTarget.value)} onSubmit={handleSubmit}></ChatInput>
+        }
     </Container>
 }
 
