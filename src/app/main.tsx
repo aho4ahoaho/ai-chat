@@ -16,5 +16,6 @@ export const Main = () => {
 const MainContainer = styled.main({
   width: "min(800px,100%)",
   margin: "0 auto",
-  padding: "1rem 0"
+  padding: "1rem",
+  boxSizing: "border-box"
 })
