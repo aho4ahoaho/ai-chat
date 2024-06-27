@@ -21,6 +21,15 @@ export const Talk = ({
                 <Text>{text.trim()}</Text>
             </TalkItemContainer>)
         }
+        {
+            talk.length === 0 && <TalkItemContainer>
+                <SpeakerName>
+                    AI
+                </SpeakerName>
+                <Separator>:</Separator>
+                <Text>Hi! How can I help you?</Text>
+            </TalkItemContainer>
+        }
     </TalkContainer>
 
 }
@@ -44,4 +53,8 @@ const Separator = styled.span({})
 
 const Text = styled.span({
     whiteSpace: 'pre-wrap'
+})
+
+const Placeholder = styled.span({
+    color: 'gray'
 })
