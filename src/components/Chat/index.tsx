@@ -11,29 +11,49 @@ type AITextSession = {
     destroy: () => void
 }
 
+type AIStatus = "readily" | "after-download" | "no"
+
 export const Chat = () => {
     const [aiSession, setAiSession] = React.useState<AITextSession>()
     const [talk, setTalk] = React.useState<TalkItem[]>([])
     const [prompt, setPrompt] = React.useState<string>('')
 
     React.useEffect(() => {
-        let aiSession: AITextSession
+        let aiSession: AITextSession | undefined
         (async () => {
             //@ts-expect-error 
-            const canUseAi = await window.ai.canCreateTextSession()
-            if (!canUseAi) {
-                console.error('Cannot create AI session')
-                return
-            } else {
-                console.log('AI session created')
+            const canUseAi: AIStatus = await window.ai?.canCreateTextSession()
+            switch (canUseAi) {
+                case "readily":
+                    break
+                case "after-download":
+                    //ダウンロード待ちだけでなく起動直後にも返される場合があるため、アラートを表示して待つ
+                    alert('AI is being loaded, please wait')
+
+                    //読み込み可能であればアラート消している間に読み込み完了しているはず
+                    //@ts-expect-error
+                    if (await window.ai.canCreateTextSession()) {
+                        break
+                    } else {
+                        alert('AI failed to load')
+                        return
+                    }
+                case "no":
+                default:
+                    console.error('AI not available')
+                    return
             }
+
             //@ts-expect-error
             aiSession = await window.ai.createTextSession()
-            setAiSession(aiSession)
+            if (aiSession) {
+                setAiSession(aiSession)
+                console.log('AI session created')
+            }
         })()
 
         return () => {
-            aiSession.destroy()
+            aiSession?.destroy()
             console.log('AI session destroyed')
         }
     }, [])
