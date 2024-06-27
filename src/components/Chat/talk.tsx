@@ -1,4 +1,5 @@
 import styled from "@emotion/styled"
+import { Markdown } from "../Markdown"
 
 export type TalkItem = {
     speaker: string
@@ -16,22 +17,23 @@ export const Talk = ({
 
     return <TalkContainer>
         {
-            talk.map(({ speaker, text }, i) => <TalkItemContainer key={i}>
-                <SpeakerName>{speaker}</SpeakerName>
-                <Separator>:</Separator>
-                <Text>{text.trim()}</Text>
-            </TalkItemContainer>)
+            talk.map((item, i) => <TalkItemComponent key={i} {...item} />)
         }
         {
-            lastMessage && <TalkItemContainer>
-                <SpeakerName>{lastMessage.speaker}</SpeakerName>
-                <Separator>:</Separator>
-                <Text>{lastMessage.text}</Text>
-            </TalkItemContainer>
+            lastMessage && <TalkItemComponent {...lastMessage} />
         }
     </TalkContainer>
 
 }
+
+const TalkItemComponent = ({ speaker, text }: TalkItem) => {
+    return <TalkItemContainer>
+        <SpeakerName>{speaker}</SpeakerName>
+        <Separator>:</Separator>
+        <Markdown markdown={text.trim()}></Markdown>
+    </TalkItemContainer>
+}
+
 const TalkContainer = styled.div({
     display: 'flex',
     flexDirection: 'column',
@@ -49,11 +51,3 @@ const SpeakerName = styled.span({
 })
 
 const Separator = styled.span({})
-
-const Text = styled.span({
-    whiteSpace: 'pre-wrap'
-})
-
-const Placeholder = styled.span({
-    color: 'gray'
-})

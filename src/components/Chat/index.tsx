@@ -21,7 +21,7 @@ export const Chat = () => {
     React.useEffect(() => {
         let aiSession: AITextSession | undefined
         (async () => {
-            //@ts-expect-error 
+            //@ts-expect-error まだ標準でwindow.aiが存在しないため
             const canUseAi: AIStatus = await window.ai?.canCreateTextSession()
             switch (canUseAi) {
                 case "readily":
@@ -31,7 +31,7 @@ export const Chat = () => {
                     alert('AI is being loaded, please wait')
 
                     //読み込み可能であればアラート消している間に読み込み完了しているはず
-                    //@ts-expect-error
+                    //@ts-expect-error まだ標準でwindow.aiが存在しないため
                     if (await window.ai.canCreateTextSession()) {
                         break
                     } else {
@@ -44,7 +44,7 @@ export const Chat = () => {
                     return
             }
 
-            //@ts-expect-error
+            //@ts-expect-error まだ標準でwindow.aiが存在しないため
             aiSession = await window.ai.createTextSession()
             if (aiSession) {
                 setAiSession(aiSession)
